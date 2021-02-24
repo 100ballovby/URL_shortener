@@ -25,5 +25,18 @@ def index():
             flash('The URL is required!', 'danger')
             return redirect(url_for('index'))
 
+        url_data = conn.execute('INSERT INTO urls (original_url) VALUES (?)', (url))
+        # вставить url в базу
+
+        conn.commit()  # подтвердить изменения
+        conn.close()  # закрыть подключение к БД
+
+        url_id = url_data.lastrowid  # получаем url из БД
+        hashid = hashids.encode(url_id)  # хэшируем url
+        short_url = request.host_url + hashid
+
+        return render_template('index.html', s_url=short_url)
+    return render_template('index.html')
+
 
 

@@ -25,7 +25,7 @@ def index():
             flash('The URL is required!', 'danger')
             return redirect(url_for('index'))
 
-        url_data = conn.execute('INSERT INTO urls (original_url) VALUES (?)', (url))
+        url_data = conn.execute('INSERT INTO urls (original_url) VALUES (?)', (url,))
         # вставить url в базу
 
         conn.commit()  # подтвердить изменения
@@ -39,5 +39,26 @@ def index():
     return render_template('index.html')
 
 
+@app.route('/<id>')
+def url_redirect(id):
+    conn = connect_to_db()
+    original = hashids.decode(id)
+
+    if original:
+        or_id = original[0]
+        url_data = conn.execute('SELECT original_url FROM urls WHERE id = (?)',
+                                (or_id,)).fetchone()
+        or_url = url_data['original_url']
+        clicks = url_data['clicks']
+
+        conn.execute('UPDATE urls SET clicks = ? WHERE id = ?',
+                     (clicks + 1, or_id))
+        conn.commit()
+        conn.close()
+        return redirect(or_url)
+    else:
+        flash('Invalid URL', 'danger')
+        return redirect(url_for('index'))
+
 if __name__ == '__main__':
-    app.run(debug=True, port=80)
+    app.run(host='0.0.0.0', debug=True)

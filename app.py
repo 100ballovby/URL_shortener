@@ -46,7 +46,7 @@ def url_redirect(id):
 
     if original:
         or_id = original[0]
-        url_data = conn.execute('SELECT original_url FROM urls WHERE id = (?)',
+        url_data = conn.execute('SELECT original_url, clicks FROM urls WHERE id = (?)',
                                 (or_id,)).fetchone()
         or_url = url_data['original_url']
         clicks = url_data['clicks']

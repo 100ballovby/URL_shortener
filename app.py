@@ -22,7 +22,7 @@ def index():
         url = request.form['url']
 
         if not url:  # если нам не передали url
-            flash('The URL is required!', 'danger')
+            flash('The URL is required!')
             return redirect(url_for('index'))
 
         url_data = conn.execute('INSERT INTO urls (original_url) VALUES (?)', (url,))
@@ -57,7 +57,7 @@ def url_redirect(id):
         conn.close()
         return redirect(or_url)
     else:
-        flash('Invalid URL', 'danger')
+        flash('Invalid URL')
         return redirect(url_for('index'))
 
 if __name__ == '__main__':

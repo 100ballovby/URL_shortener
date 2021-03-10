@@ -32,8 +32,8 @@
 </nav>
 
 <div class="container">
-    {% for message, style in get_flashed_messages() %}
-        <div class="alert alert-{{ style }}">{{ message }}</div>
+    {% for message in get_flashed_messages() %}
+        <div class="alert alert-danger">{{ message }}</div>
     {% endfor %}
     {% block content %}
 

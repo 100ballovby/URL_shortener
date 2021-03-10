@@ -60,5 +60,21 @@ def url_redirect(id):
         flash('Invalid URL')
         return redirect(url_for('index'))
 
+
+@app.route('/stats')
+def statistic():
+    conn = connect_to_db()
+    db_urls = conn.execute('SELECT * FROM urls').fetchall()
+    conn.close()
+
+    urls = []
+    for url in db_urls:
+        url = dict(url)
+        url['short_url'] = request.host_url + hashids.encode(url['id'])
+        urls.append(url)
+
+    return render_template('', urls=urls)
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)

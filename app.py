@@ -73,7 +73,7 @@ def statistic():
         url['short_url'] = request.host_url + hashids.encode(url['id'])
         urls.append(url)
 
-    return render_template('', urls=urls)
+    return render_template('stats.html', urls=urls)
 
 
 if __name__ == '__main__':
